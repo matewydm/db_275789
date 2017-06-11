@@ -68,22 +68,11 @@ public class Parser
 
     private Node parseExpression()
     {
-
         if (this.check(TokenType.LBR)) {
             return parseBrackets();
         } else {
             Node left = this.parseTerm();
-            if (this.check(TokenType.ADD)) {
-                this.forward();
-                Node right = this.parseExpression();
-                return new NodeAdd(left, right);
-            } else if (this.check(TokenType.SUB)) {
-                this.forward();
-                Node right = this.parseExpression();
-                return new NodeSub(left, right);
-            } else {
-                return left;
-            }
+            return buildNode(left);
         }
     }
 
@@ -94,18 +83,7 @@ public class Parser
         NodeBracket bracket = new NodeBracket(left);
         this.expect(TokenType.RBR);
         this.forward();
-        Node right = null;
-        if (this.check(TokenType.ADD)) {
-            this.forward();
-            right = this.parseExpression();
-            return new NodeAdd(bracket,right);
-        }
-        else if (this.check(TokenType.MUL)) {
-            this.forward();
-            right = this.parseExpression();
-            return new NodeMul(bracket,right);
-        }
-        return bracket;
+        return buildNode(bracket);
     }
 
     private Node parseProgram()
@@ -120,5 +98,31 @@ public class Parser
         Parser parser = new Parser(tokens);
         Node root = parser.parseProgram();
         return root;
+    }
+
+    private Node buildNode(Node left) {
+        switch (this.ctoken.getType()) {
+            case ADD: {
+                this.forward();
+                Node right = this.parseExpression();
+                return new NodeAdd(left,right);
+            }
+            case DIV: {
+                this.forward();
+                Node right = this.parseExpression();
+                return new NodeDiv(left, right);
+            }
+            case SUB: {
+                this.forward();
+                Node right = this.parseExpression();
+                return new NodeSub(left, right);
+            }
+            case MUL: {
+                this.forward();
+                Node right = this.parseExpression();
+                return new NodeMul(left, right);
+            }
+            default: return left;
+        }
     }
 }
