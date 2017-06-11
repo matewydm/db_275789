@@ -38,6 +38,7 @@ public class Parser
 
     private Node parseNumber()
     {
+        this.expect(TokenType.NUM);
         StringBuilder multiNumeric = new StringBuilder();
         while(check(TokenType.NUM)) {
             multiNumeric.append(this.value());
