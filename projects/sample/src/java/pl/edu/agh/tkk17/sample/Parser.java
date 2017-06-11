@@ -56,6 +56,10 @@ public class Parser
                 this.forward();
                 Node right = this.parseTerm();
                 return new NodeMul(left, right);
+            } else if (this.check(TokenType.DIV)) {
+                this.forward();
+                Node right = this.parseTerm();
+                return new NodeDiv(left, right);
             } else {
                 return left;
             }
@@ -73,6 +77,10 @@ public class Parser
                 this.forward();
                 Node right = this.parseExpression();
                 return new NodeAdd(left, right);
+            } else if (this.check(TokenType.SUB)) {
+                this.forward();
+                Node right = this.parseExpression();
+                return new NodeSub(left, right);
             } else {
                 return left;
             }

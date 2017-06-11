@@ -6,6 +6,8 @@ public enum TokenType
     NUM("NUM"),
     ADD("ADD"),
     MUL("MUL"),
+    DIV("DIV"),
+    SUB("SUB"),
     LBR("LBR"),
     RBR("RBR");
 

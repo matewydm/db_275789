@@ -6,4 +6,6 @@ public interface NodeVisitor
     public void visit(NodeMul node);
     public void visit(NodeNumber node);
     public void visit(NodeBracket node);
+    public void visit(NodeDiv node);
+    public void visit(NodeSub node);
 }

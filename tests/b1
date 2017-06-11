@@ -24,8 +24,8 @@ test_out "$1:11" "$calc" "1  " "1" && \
 test_out "$1:12" "$calc" " 1  +2*  3+  (  (5 * 3 )) " "22" 
 
 # division and subtraction
-# test_out "$1:13" "$calc" "4-2" "2" && \
-# test_out "$1:14" "$calc" "0-2" "-2" && \
-# test_out "$1:14" "$calc" "8/2" "4" && \
-# test_out "$1:14" "$calc" "0/2" "0" && \
-# test_err "$1:14" "$calc" "2/0" "Division by 0."
+test_out "$1:13" "$calc" "4-2" "2" && \
+test_out "$1:14" "$calc" "0-2" "-2" && \
+test_out "$1:14" "$calc" "8/2" "4" && \
+test_out "$1:14" "$calc" "0/2" "0" && \
+test_err "$1:14" "$calc" "2/0" "Division by 0."
