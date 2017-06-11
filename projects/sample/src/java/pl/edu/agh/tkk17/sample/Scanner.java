@@ -50,7 +50,7 @@ public class Scanner implements Iterator<Token>, Iterable<Token>
         Token token;
 
         while (character == ' ') {
-
+            this.readChar();
             character = this.character;
         }
 
