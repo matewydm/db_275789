@@ -5,7 +5,9 @@ public enum TokenType
     END("END"),
     NUM("NUM"),
     ADD("ADD"),
-    MUL("MUL");
+    MUL("MUL"),
+    LBR("LBR"),
+    RBR("RBR");
 
     private final String name;
 

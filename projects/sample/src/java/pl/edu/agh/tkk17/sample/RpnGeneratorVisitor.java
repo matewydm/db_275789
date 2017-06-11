@@ -36,4 +36,10 @@ public class RpnGeneratorVisitor implements NodeVisitor
         String value = node.getValue();
         this.output.println("push $" + value);
     }
+
+    @Override
+    public void visit(NodeBracket node) {
+        node.accept(this);
+        this.output.println("");
+    }
 }

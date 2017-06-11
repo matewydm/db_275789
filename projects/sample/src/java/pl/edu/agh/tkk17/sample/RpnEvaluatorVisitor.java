@@ -42,4 +42,9 @@ public class RpnEvaluatorVisitor implements NodeVisitor
         Integer numericValue = Integer.parseInt(value);
         this.stack.push(numericValue);
     }
+
+    @Override
+    public void visit(NodeBracket node) {
+        node.accept(this);
+    }
 }

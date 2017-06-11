@@ -48,26 +48,56 @@ public class Parser
 
     private Node parseTerm()
     {
-        Node left = this.parseNumber();
-        if (this.check(TokenType.MUL)) {
-            this.forward();
-            Node right = this.parseTerm();
-            return new NodeMul(left, right);
+        if (this.check(TokenType.LBR)) {
+            return parseBrackets();
         } else {
-            return left;
+            Node left = this.parseNumber();
+            if (this.check(TokenType.MUL)) {
+                this.forward();
+                Node right = this.parseTerm();
+                return new NodeMul(left, right);
+            } else {
+                return left;
+            }
         }
     }
 
     private Node parseExpression()
     {
-        Node left = this.parseTerm();
+
+        if (this.check(TokenType.LBR)) {
+            return parseBrackets();
+        } else {
+            Node left = this.parseTerm();
+            if (this.check(TokenType.ADD)) {
+                this.forward();
+                Node right = this.parseExpression();
+                return new NodeAdd(left, right);
+            } else {
+                return left;
+            }
+        }
+    }
+
+    private Node parseBrackets() {
+
+        this.forward();
+        Node left = this.parseExpression();
+        NodeBracket bracket = new NodeBracket(left);
+        this.expect(TokenType.RBR);
+        this.forward();
+        Node right = null;
         if (this.check(TokenType.ADD)) {
             this.forward();
-            Node right = this.parseExpression();
-            return new NodeAdd(left, right);
-        } else {
-            return left;
+            right = this.parseExpression();
+            return new NodeAdd(bracket,right);
         }
+        else if (this.check(TokenType.MUL)) {
+            this.forward();
+            right = this.parseExpression();
+            return new NodeMul(bracket,right);
+        }
+        return bracket;
     }
 
     private Node parseProgram()
