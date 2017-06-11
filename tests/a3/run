@@ -1,0 +1,22 @@
+#!/bin/bash
+here=$(dirname $0)
+. "$here/../../lib/testing.bash"
+
+compile="$2/bin/compile"
+
+cmd_name=$(basename "$compile")
+tmp_dir="$here/tmp"
+tmp_src="$tmp_dir/asm.s"
+tmp_bin="$tmp_dir/bin"
+input="1+2*3"
+expect="7"
+
+mkdir -p "$tmp_dir"
+echo "[a3] $cmd_name > '$tmp_src' <<< '$input'"
+$compile > "$tmp_src" <<< "$input"
+echo "[a3] gcc '$tmp_src' -o '$tmp_bin'"
+gcc "$tmp_src" -o "$tmp_bin"
+echo "[a3] $tmp_bin"
+result=$($tmp_bin)
+echo "[a3] > $result"
+[ $result == "$expect" ]

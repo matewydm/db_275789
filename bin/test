@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# no args - nothing to do
+if [ $# -eq 0 ]; then
+  echo "Project name required"
+  exit 1
+fi
+
+# first arg is project name
+project_dir="$1"
+if [ ! -d "$project_dir" ]; then
+  echo "Can't find project '$project_dir'."
+  exit 1
+fi
+project_abs_dir=$( realpath "$project_dir" )
+
+# other args are tests names
+# if missing, use project's 'tests' file
+test_names=()
+if [ $# -gt 1 ]; then
+  for test_name in "${@:2}"; do
+    test_names+=("$test_name")
+  done
+else
+  project_test_file="$project_dir/tests"
+  if [ -f $project_test_file ]; then
+    while read test_name; do
+      test_names+=("$test_name")
+    done < "$project_test_file"
+  fi
+fi
+
+# any tests specified?
+if [ ${#test_names[@]} -eq 0 ]; then
+  echo "No tests specified"
+  exit 0
+fi
+
+# verify and run tests
+home_dir=$( pwd )
+for test_name in "${test_names[@]}"; do
+  test_dir=""
+  test_cmd="tests/$test_name"
+  if [ -d "$test_cmd" ]; then
+    test_dir="$test_cmd"
+    test_cmd="./run"
+    cd "$test_dir"
+  fi
+  if [ ! -f "$test_cmd" ]; then
+    echo "$test_name: Can't find file $test_cmd"
+  elif [ ! -x "$test_cmd" ]; then
+    echo "$test_name: Can't execute file $test_cmd"
+  else
+    # $test_cmd "$project_abs_dir" > /dev/null 2>&1
+    $test_cmd "$test_name" "$project_abs_dir"
+    test_result=$?
+    if [ $test_result -eq 0 ]; then
+      echo "$test_name: PASSED"
+    else
+      echo "$test_name: FAILED ($test_result)"
+    fi
+  fi
+  if [ ! -z $test_dir ]; then
+    cd "$home_dir"
+  fi
+done
