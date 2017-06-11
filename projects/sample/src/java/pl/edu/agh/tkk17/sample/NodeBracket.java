@@ -19,6 +19,12 @@ public class NodeBracket extends Node{
         else if (node instanceof NodeNumber) {
             visitor.visit((NodeNumber) node);
         }
+        else if (node instanceof NodeDiv) {
+            visitor.visit((NodeDiv) node);
+        }
+        else if (node instanceof NodeSub) {
+            visitor.visit((NodeSub) node);
+        }
         else if (node instanceof NodeBracket) {
             visitor.visit((NodeBracket) node);
         }
